@@ -23,6 +23,6 @@ function loadGame(){
 }
 
 function loadHome(){
-  htmlListArray = getTeamList(url, "Games");
+  htmlListArray = getTeamList(url);
   return render("home",{teams: htmlListArray});
 }

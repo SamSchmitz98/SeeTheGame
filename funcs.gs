@@ -1,29 +1,25 @@
-function removeDups(list) {
+function rangeToList(range) {
   var result = [];
-  for (var i = 0; i < list.length; i++){
-    if(!result.includes(list[i].toString())) {
-      result.push(list[i].toString());
+  var temp;
+  for (var i = 0; i < range.length; i++){
+    temp = range[i].toString();
+    if (temp != ''){
+      result.push(temp);
     }
   };
   Logger.log(result)
   return result;
 }
 
-function getTeamList(url, sheet){
+function getTeamList(url){
   var ss = SpreadsheetApp.openByUrl(url);
-  var ws = ss.getSheetByName(sheet);
-  var list = ws.getRange(2,1,ws.getRange("A2").getDataRegion().getLastRow(),1).getValues();
-  list = list.concat(ws.getRange(2,3,ws.getRange("C2").getDataRegion().getLastRow(),1).getValues());
-  var gamecounts = {};
-  for (var i = 1; i < list.length; i++){
-    if (isNaN(gamecounts[list[i].toString()])){
-      gamecounts[list[i].toString()] = 1;
-    } else {
-      gamecounts[list[i].toString()]++;
-    }
-  }
-  list = removeDups(list);
-  list = list.sort();
+  var ws = ss.getSheetByName("Teams");
+  var list = ws.getRange(1,1,ws.getRange("A1").getDataRegion().getLastRow(),1).getValues();
+  var gamecounts = ws.getRange(1,2,ws.getRange("B1").getDataRegion().getLastRow(),1).getValues();
+  Logger.log(gamecounts);
+  list = rangeToList(list);
+  gamecounts = rangeToList(gamecounts);
+  Logger.log(gamecounts);
   var result = {list, gamecounts};
   return result;
 }
