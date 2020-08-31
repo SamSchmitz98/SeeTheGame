@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Your game is</h1>
+      <i id="load" class="material-icons" style="color:transparent">settings</i>
+      <div class="row">
+        <div class="input-field col s12">
+          <a href="<?= ScriptApp.getService().getUrl();?>?v=game" id="reload" class="waves-effect waves-light btn-small <?= primarycolor?>"><i class="material-icons right">cached</i>Get New Game</a>
+          <a href="<?= ScriptApp.getService().getUrl();?>?v=home" id="return" class="waves-effect waves-light btn-small <?= primarycolor?>">Return to Selection Screen</a>
+        </div>
+      </div>  <!-- CLOSE ROW -->
+    </div> <!-- CLOSE CONTAINTER -->
+  </body>
+</html>
+
+

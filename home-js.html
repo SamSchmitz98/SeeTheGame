@@ -1,0 +1,81 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("teams").addEventListener("click", teamsClicked);
+    document.getElementById("btn").addEventListener("click", getGame);
+    var elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+  });
+
+  function teamsClicked(){
+    document.getElementById("teamslabel").style = "font-size: 20px"; 
+  }
+  
+  async function getGame(){
+    startLoad();
+    var requirements = {};
+    requirements.teams = getSelectValues(document.getElementById("teamsselect"));
+    google.script.run.withSuccessHandler(stopLoad).findGame(requirements);
+  }
+  
+  function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+
+      if (opt.selected) {
+        result.push(opt.value || opt.text);
+      }
+    }
+    return result;
+  }
+  
+  function startLoad(){
+    document.getElementById("load").style = "animation: rotation 2s infinite linear;";
+    document.getElementById("load").innerHTML = "settings";
+    document.getElementById("nickname").innerHTML = "";
+    document.getElementById("gametitle").innerHTML = "";
+    document.getElementById("gamebutton").style.display = "none";
+  }
+
+  function stopLoad(param){
+    var matchup = param[0];
+    document.getElementById("load").innerHTML = "check";
+    document.getElementById("load").style = "";
+    if (matchup[0] == matchup[4]){
+      document.getElementById("gametitle").innerHTML = ((matchup[3] ? "#" + matchup[3] + " " : "") + matchup[2] + " at " + (matchup[1] ? "#" + matchup[1] + " " : "") + matchup[0]);
+    }
+    else if (matchup[2] == matchup[4]){
+      document.getElementById("gametitle").innerHTML = ((matchup[1] ? "#" + matchup[1] + " " : "") + matchup[0] + " at " + (matchup[3] ? "#" + matchup[3] + " " : "") + matchup[2]);
+    }
+    else{
+      document.getElementById("gametitle").innerHTML = ((matchup[1] ? "#" + matchup[1] + " " : "") + matchup[0] + " and " + (matchup[3] ? "#" + matchup[3] + " " : "") + matchup[2] + " at The " + matchup[4]);
+    }
+    if (document.getElementById("nicknamebox").checked){
+      document.getElementById("nickname").innerHTML = matchup[6];
+    }
+    if (document.getElementById("yearbox").checked){
+      document.getElementById("gametitle").innerHTML += " (" + matchup[5] + ")";
+    }
+    document.getElementById("gamebutton").href = matchup[7];
+    document.getElementById("gamebutton").style.display = "";
+  }
+
+  $(document).ready(function() {
+    $('select').formSelect();
+    $('select.select_all').siblings('ul').prepend('<li id=sm_select_all><span>Select All</span></li>');
+    $('li#sm_select_all').on('click', function () {
+      var jq_elem = $(this), 
+          jq_elem_span = jq_elem.find('span'),
+          select_all = jq_elem_span.text() == 'Select All',
+          set_text = select_all ? 'Select None' : 'Select All';
+      jq_elem_span.text(set_text);
+      jq_elem.siblings('li').filter(function() {
+        return $(this).find('input').prop('checked') != select_all;
+      }).click();
+    });
+})
+
+</script>

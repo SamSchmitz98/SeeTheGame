@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <?!= include("home-css"); ?>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class ="container">
+      <div class="row">
+        <button id="teams" style="height: 47px; color: transparent; background-color: transparent; border-color: transparent; cursor: default" class="input-field col s6">
+          <select id="teamsselect" class="select_all" multiple>
+            <? for (var i = 1; i<teams.list.length; i++){ ?>
+            <option value=<?=teams.list[i]?> id=<?=teams.list[i]?>><?=teams.list[i] + " (" + teams.gamecounts[teams.list[i]] + ")";?></option>
+            <? } ?>
+          </select>
+          <label id="teamslabel" style= "font-size: 45px">Teams</label>
+        </button>
+        <p>
+          <label>
+            <input type="checkbox" id="yearbox"/>
+            <span style="color:<?= boxtextcolor?>">Show Year</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input type="checkbox" id="nicknamebox"/>
+            <span style="color:<?= boxtextcolor?>">Show Nickname of Game (If Applicable)</span>
+          </label>
+        </p>
+      </div> <!-- CLOSE ROW -->
+      <div class="row">
+        <div class="input-field col s12">
+          <button id="btn" class="waves-effect waves-light btn-large <?= primarycolor?>"><i class="material-icons left">play_circle_outline</i>Find a Game</button>
+          <i id="load" class="material-icons" style="color:transparent">settings</i>
+        </div>
+      </div>  <!-- CLOSE ROW -->
+      <div class="row">
+        <div class="input-field col s12">
+          <h1 id="nickname"></h1>
+        </div>
+      </div>  <!-- CLOSE ROW -->
+      <div class="row">
+        <div class="input-field col s12">
+          <h1 id="gametitle"></h1>
+        </div>
+      </div>  <!-- CLOSE ROW -->
+      <div class="row">
+        <div class="input-field col s12">
+          <a href="" id="gamebutton" class="waves-effect waves-light btn-large <?= primarycolor?>" style="display: none"><i class="material-icons left">video_library</i>Go To Video</a>
+        </div>
+      </div>  <!-- CLOSE ROW -->
+    </div> <!-- CLOSE CONTAINTER -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <?!= include("home-js"); ?>
+  </body>
+</html>
+
+
