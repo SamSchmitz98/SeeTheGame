@@ -10,12 +10,6 @@ function rangeToList(range) {
   return result;
 }
 
-function testFindGame(){	
-  var requirements = {};	
-  requirements.teams = ["Nebraska"];	
-  findGame(requirements);	
-}
-
 function getTeamList(){
   var ss = SpreadsheetApp.openByUrl(url);
   var ws = ss.getSheetByName("Teams");
@@ -32,17 +26,18 @@ function findGame(requirements){
   var ss = SpreadsheetApp.openByUrl(url);
   var ws = ss.getSheetByName("Teams");
   var gws = ss.getSheetByName("Games");
+  var teamlist=getTeamList().list;
   if (requirements.teams == ""){
-    requirements.teams = getTeamList().list;
+    requirements.teams = teamlist;
   }
   var num;
-  if (requirements.teams.length != ws.getRange("A1").getDataRegion().getLastRow()){
+  var numteams = ws.getRange("A1").getDataRegion().getLastRow()
+  if (requirements.teams.length != numteams){
     var rownums = [];
     var temp;
     var backedup = 0;
-    for (var i = 1; i <= ws.getRange("A1").getDataRegion().getLastRow(); i++){
-      Logger.log(requirements.teams[0] + " == " + ws.getRange("A" + i).getValue());
-      if (requirements.teams[0] == (ws.getRange("A"+i).getValue())){
+    for (var i = 1; i <= numteams; i++){
+      if (requirements.teams[0] == (teamlist[i-1])){
         temp = ws.getRange(i, 1).getDataRegion(SpreadsheetApp.Dimension.COLUMNS).getValues()[0];
           for (var c = 2; c < temp.length; c++){
             rownums.push(temp[c].toString());
@@ -53,17 +48,17 @@ function findGame(requirements){
         }
         backedup = 0;
       } else if(backedup == 0){
-        if (ws.getRange("A"+i).getValue().localeCompare(requirements.teams[0]) == -1){
+        if (teamlist[i-1].localeCompare(requirements.teams[0]) == -1 && i+10 < numteams){
           i += 9;
         } else {
-          i -= 9;
+          i -= 10;
           backedup = 1;
         }
       }
     }
     num = rownums[Math.floor(Math.random() * rownums.length)];
   } else {
-    num = Math.floor(Math.random() * ws.getRange("A1").getDataRegion().getLastRow());
+    num = Math.floor(Math.random() * numteams);
   }
   var row = gws.getRange(num, 1, 1, 9).getValues();
   var rowarray = [];
