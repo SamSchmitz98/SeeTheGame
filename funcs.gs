@@ -21,37 +21,35 @@ function getTeamList(){
   return result;
 }
 
-function testFindGame(){
-  var requirements = {};
-  requirements.teams = ["Air Force", "Alabama"];
-  findGame(requirements);
-}
-
 function findGame(requirements){
   var requirements = requirements;
   var ss = SpreadsheetApp.openByUrl(url);
   var ws = ss.getSheetByName("Teams");
   var gws = ss.getSheetByName("Games");
   if (requirements.teams == ""){
-    requirements.teams = getTeamList(url, "Games").list.slice(1);
+    requirements.teams = getTeamList().list;
   }
-  var rownums = [];
-  var temp;
-  var count = 0;
-  for (var i = 1; i <= ws.getRange("A1").getDataRegion().getLastRow(); i++){
-    if (requirements.teams.includes(ws.getRange("A"+i).getValue())){
-      temp = rangeToList(ws.getRange(i, 1).getDataRegion(SpreadsheetApp.Dimension.COLUMNS).getValues()[0]);
-        for (var c = 2; c < temp.length; c++){
-          rownums.push(temp[c].toString());
+  var num;
+  if (requirements.teams.length != ws.getRange("A1").getDataRegion().getLastRow()){
+    var rownums = [];
+    var temp;
+    var count = 0;
+    for (var i = 1; i <= ws.getRange("A1").getDataRegion().getLastRow(); i++){
+      if (requirements.teams.includes(ws.getRange("A"+i).getValue())){
+        temp = ws.getRange(i, 1).getDataRegion(SpreadsheetApp.Dimension.COLUMNS).getValues()[0];
+          for (var c = 2; c < temp.length; c++){
+            rownums.push(temp[c].toString());
+          }
+      count += 1;
+        if (count == requirements.teams.length){
+          break;
         }
-    count += 1;
-      if (count == requirements.teams.length){
-        break;
       }
     }
+    num = rownums[Math.floor(Math.random() * rownums.length)];
+  } else {
+    num = Math.floor(Math.random() * ws.getRange("A1").getDataRegion().getLastRow());
   }
-  Logger.log(rownums);
-  var num = rownums[Math.floor(Math.random() * rownums.length)];
   var row = gws.getRange(num, 1, 1, 9).getValues();
   var rowarray = [];
   for (var i = 0; i < row.length; i++) {
