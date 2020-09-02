@@ -12,7 +12,7 @@ function rangeToList(range) {
 
 function testFindGame(){	
   var requirements = {};	
-  requirements.teams = ["Air Force", "Alabama"];	
+  requirements.teams = ["Nebraska"];	
   findGame(requirements);	
 }
 
@@ -39,9 +39,9 @@ function findGame(requirements){
   if (requirements.teams.length != ws.getRange("A1").getDataRegion().getLastRow()){
     var rownums = [];
     var temp;
+    var backedup = 0;
     for (var i = 1; i <= ws.getRange("A1").getDataRegion().getLastRow(); i++){
-      Logger.log("Iterating Through i:" + i)
-      Logger.log("  "+requirements.teams[0]+" == " + ws.getRange("A"+i).getValue());
+      Logger.log(requirements.teams[0] + " == " + ws.getRange("A" + i).getValue());
       if (requirements.teams[0] == (ws.getRange("A"+i).getValue())){
         temp = ws.getRange(i, 1).getDataRegion(SpreadsheetApp.Dimension.COLUMNS).getValues()[0];
           for (var c = 2; c < temp.length; c++){
@@ -50,6 +50,14 @@ function findGame(requirements){
         requirements.teams.shift();
         if (requirements.teams.length == 0){
           break;
+        }
+        backedup = 0;
+      } else if(backedup == 0){
+        if (ws.getRange("A"+i).getValue().localeCompare(requirements.teams[0]) == -1){
+          i += 9;
+        } else {
+          i -= 9;
+          backedup = 1;
         }
       }
     }
